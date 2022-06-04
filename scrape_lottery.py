@@ -9,7 +9,7 @@ import pandas as pd
 import sys, getopt
 
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+#chrome_options.add_argument("--headless")
 
 verify = "https://rollbit.com/rlb/lottery/provably-fair"
 current_lottery_link = "https://rollbit.com/rlb/lottery/current"
@@ -68,7 +68,7 @@ if vpn == True:
         print("VPN disconnected...")
     else:
         print("VPN active")
-        #open_rollbit_lottery_entries()
+        open_rollbit_lottery_entries()
         open_lottery_amounts()
 else:
     open_rollbit_lottery_entries()
