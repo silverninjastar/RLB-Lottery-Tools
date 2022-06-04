@@ -1,6 +1,7 @@
 import hashlib
 import math
 import pyblake2
+import json
 
 jackpot_fraction = 0.02
 jackpot_probability = 0.1
@@ -16,10 +17,9 @@ prizes = [
         ]
 
 # the staked amounts are the integer number of RLB cents before applying multipliers
-file1 = open("lottery_entries.txt", "r",  encoding="utf-8") 
+file1 = open("lottery_entries.json", "r",  encoding="utf-8") 
 ugly_stakes = file1.read()
-print(type(ugly_stakes))
-stakes = ugly_stakes.split(',')
+stakes = json.loads(ugly_stakes)
 '''
 stakes = [
         {
@@ -70,11 +70,10 @@ print('Jackpot won:', jackpot_won)
 if not jackpot_won:
     prizes.pop(0)
 
-print(type(stakes))
 for stake in stakes:
-    stake['staked'] = round(100.0 * (stake['staked'] * stake['multiplier'] / 100.0))
+    stake['staked'] = round(100.0 * (stake['staked'] / 100.0))
 
-stakes.sort(key=lambda x: (x['seed_hash'], x['user_id']))
+stakes.sort(key=lambda x: (x['seed'], x['user_id']))
 for prize in prizes:
     if len(stakes) == 0:
         break
@@ -85,7 +84,7 @@ for prize in prizes:
     for (i, stake) in enumerate(stakes):
         current_stake += stake['staked']
         if outcome_stake < current_stake:
-            print(f"User {stake['user_id'].decode('ascii')} (is_team: {stake['team_users'] > 0}) won prize id {prize['prize_id'].decode('ascii')} for ${prize['amount']}")
+            print(f"User {stake['user_id']} (is_team: {stake['team_users'] > 0}) won prize id {prize['prize_id'].decode('ascii')} for ${prize['amount']}")
             stakes[i]['team_users'] -= 5
             if stakes[i]['team_users'] < 1:
                 stakes.pop(i)
