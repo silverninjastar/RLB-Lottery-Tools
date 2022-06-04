@@ -20,38 +20,7 @@ prizes = [
 file1 = open("lottery_entries.json", "r",  encoding="utf-8") 
 ugly_stakes = file1.read()
 stakes = json.loads(ugly_stakes)
-'''
-stakes = [
-        {
-            'user_id': b'3b9c774e-f896-4ff9-b4de-6e5f2e469884',
-            'seed_hash': b'9f5e07cf788b584a291e4c90fefdf7c3',
-            'staked': 1500,
-            'multiplier': 1.5,
-            'team_users': 0
-            },
-        {
-            'user_id': b'd52bbe44-989f-4212-acc3-83c9363650e7',
-            'seed_hash': b'd41d8cd98f00b204e9800998ecf8427e',
-            'staked': 100020,
-            'multiplier': 3.0,
-            'team_users': 5
-            },
-        {
-            'user_id': b'c9ab9616-233e-45d5-9a67-43cc33b92aa9',
-            'seed_hash': b'd41d8cd98f00b204e9800998ecf8427e',
-            'staked': 95000,
-            'multiplier': 1.0,
-            'team_users': 0
-            },
-        {
-            'user_id': b'8c6b8b64-6815-6084-0a3e-178401251b68',
-            'seed_hash': b'd41d8cd98f00b204e9800998ecf8427e',
-            'staked': 777700,
-            'multiplier': 1.0,
-            'team_users': 0
-            }
-        ]
-'''
+
 print('seed_hash for 1st stake:', hashlib.md5(b'seed123').hexdigest())
 print('seed_hash for 2nd stake:', hashlib.md5(b'').hexdigest())
 print('secret_hash:', pyblake2.blake2b(secret, digest_size=32).digest().hex())
