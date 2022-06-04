@@ -9,9 +9,10 @@ import pandas as pd
 import sys, getopt
 
 chrome_options = Options()
-#chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 
 verify = "https://rollbit.com/rlb/lottery/provably-fair"
+current_lottery_link = "https://rollbit.com/rlb/lottery/current"
 
 def open_rollbit_lottery_entries():
     print("Opening Chrome to Rollbit Lottery Entries")   
@@ -30,7 +31,26 @@ def open_rollbit_lottery_entries():
     elem = browser.find_element_by_xpath("/html/body/div[1]/div[4]/div[1]/div/div[3]/pre[2]")
     file1 = open("lottery_entries.json", "w",  encoding="utf-8") 
     file1.write(elem.text)
-    file1.close() 
+    file1.close()
+
+def open_lottery_amounts():
+    browser.get(current_lottery_link)
+    browser.maximize_window()
+    time.sleep(10)
+    
+    total = browser.find_elements_by_class_name("css-nr9v78")
+    nums = ""
+    for x in range(len(total)):
+        nums += total[x].text
+
+    current_jp = nums[-7:]
+    current_lottery_val = nums[:-7]
+    print("Current Jackpot: $" + current_jp + "\nCurrent Lottery: $" + current_lottery_val)
+    
+    file2 = open("vals.json", "w",  encoding="utf-8") 
+    file2.write("{\n\"lottery\": " + current_lottery_val + ",\n\"jackpot\": " + current_jp + "\n}")
+    file2.close()
+
     
 #Use headless chromedriver for browser
 browser = webdriver.Chrome("../chromedriver.exe",chrome_options=chrome_options)
@@ -48,8 +68,10 @@ if vpn == True:
         print("VPN disconnected...")
     else:
         print("VPN active")
-        open_rollbit_lottery_entries()
+        #open_rollbit_lottery_entries()
+        open_lottery_amounts()
 else:
     open_rollbit_lottery_entries()
+    open_lottery_amounts()
 
 browser.quit()
